@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+  "name": "Tira Beauty Clean Filter",
+  "version": "1.0",
+  "description": "Automatically enables the 'clean' filter in the 'conscious' category on Tira Beauty.",
+  "permissions": ["activeTab", "storage"],
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.tirabeauty.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "tirabeautycleanfilter@example.com"
+    }
+  }
+}
