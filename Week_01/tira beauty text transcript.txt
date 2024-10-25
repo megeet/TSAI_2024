@@ -1,0 +1,14 @@
+Transcript for Tira Beauty Clean Filter Chrome Extension
+
+We all shop for makeup online these days, however, don't we always want to prefer the products that are chemical free? Every time we visit a website, it does provide you the filters to select clean or vegan products, however what if we get this functionality out of the box? We have created a chrome extension which will enhance your shopping experience by automatically applying the filter and showing only "clean" products on Tira Beauty website.
+
+Don't worry, if you want to see all products, you can disable this extension as well.
+Let's try it out. I am going to enable this extension and visit some make up sections.
+
+In the "Conscious" filter, you’ll find options like "Cruelty-Free," "Clean," and "Vegan." The enabled extension automatically applies the "Clean" filter, showing products accordingly.
+
+
+Disabling the extension restores the original product list.
+
+
+Enjoy your shopping with Tira Beauty, and thank you for using our Clean Filter Extension!
