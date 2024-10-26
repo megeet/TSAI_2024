@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun Animal Gallery & File Uploader</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="main-container">
+        <h1 class="main-title">🐾 Fun Animal Gallery & File Uploader 📁</h1>
+        <div class="container">
+            <div class="box">
+                <h2>🎨 Pick Your Favorite Animal</h2>
+                <div class="animal-selector">
+                    <label><input type="radio" name="animal" value="cat"> 🐱 Meow Meow</label>
+                    <label><input type="radio" name="animal" value="dog"> 🐶 Woof Woof</label>
+                    <label><input type="radio" name="animal" value="elephant"> 🐘 Trumpet Trumpet</label>
+                </div>
+                <div id="animal-image"></div>
+                <div id="image-credit"></div>
+            </div>
+            <div class="box">
+                <h2>📤 Upload Your Cool Stuff</h2>
+                <form id="upload-form">
+                    <label for="file-upload" class="custom-file-upload">
+                        <i class="fas fa-cloud-upload-alt"></i> Choose & Upload File
+                    </label>
+                    <input type="file" id="file-upload">
+                </form>
+                <div id="file-info"></div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', path='/js/script.js') }}"></script>
+</body>
+</html>
