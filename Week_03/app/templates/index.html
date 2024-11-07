@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Format Viewer</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Multi-Format Viewer</h1>
+            <p class="subtitle">View different types of files</p>
+        </header>
+        
+        <main class="content">
+            <div class="upload-section">
+                <div class="panel">
+                    <div class="format-selector">
+                        <button class="format-btn active" data-format="text">Text/CSV</button>
+                        <button class="format-btn" data-format="image">Image</button>
+                        <button class="format-btn" data-format="audio">Audio</button>
+                        <button class="format-btn" data-format="3d">3D Model</button>
+                    </div>
+
+                    <div class="upload-info">
+                        <h2>Upload File</h2>
+                        <p class="format-hint" id="formatHint">Accepted formats: .txt, .csv</p>
+                    </div>
+
+                    <form id="uploadForm">
+                        <div class="file-upload">
+                            <input type="file" id="fileInput" accept=".csv,.txt" required>
+                            <label for="fileInput">
+                                <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v4h3l-4 4-4-4h3z"/>
+                                </svg>
+                                <span class="upload-text">Choose a file</span>
+                                <span class="upload-hint">or drag it here</span>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="data-section">
+                <div class="panel">
+                    <h2>Preview</h2>
+                    <div id="dataDisplay">
+                        <div class="placeholder">
+                            <p>Upload a file to view its contents</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const uploadText = document.querySelector('.upload-text');
+        const uploadHint = document.querySelector('.upload-hint');
+        const formatHint = document.getElementById('formatHint');
+        const formatBtns = document.querySelectorAll('.format-btn');
+        let currentFormat = 'text';
+
+        const formatConfigs = {
+            text: {
+                accept: '.csv,.txt',
+                hint: 'Accepted formats: .txt, .csv'
+            },
+            image: {
+                accept: '.jpg,.jpeg,.png,.gif',
+                hint: 'Accepted formats: JPG, PNG, GIF'
+            },
+            audio: {
+                accept: '.mp3,.wav',
+                hint: 'Accepted formats: MP3, WAV'
+            },
+            '3d': {
+                accept: '.glb,.gltf,.obj,.off',
+                hint: 'Accepted formats: GLB, GLTF, OBJ, OFF'
+            }
+        };
+
+        formatBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                formatBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFormat = btn.dataset.format;
+                fileInput.accept = formatConfigs[currentFormat].accept;
+                formatHint.textContent = formatConfigs[currentFormat].hint;
+                resetUpload();
+            });
+        });
+
+        function resetUpload() {
+            fileInput.value = '';
+            uploadText.textContent = 'Choose a file';
+            uploadHint.textContent = 'or drag it here';
+            const display = document.getElementById('dataDisplay');
+            display.innerHTML = '<div class="placeholder"><p>Upload a file to view its contents</p></div>';
+        }
+
+        fileInput.addEventListener('change', async (e) => {
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                uploadText.textContent = file.name;
+                uploadHint.textContent = 'Processing...';
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('format', currentFormat);
+
+                try {
+                    const response = await fetch('/upload/', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        uploadHint.textContent = 'File uploaded successfully';
+                        displayContent(result, currentFormat);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    uploadHint.textContent = 'Error uploading file';
+                }
+            }
+        });
+
+        function displayContent(data, format) {
+            const display = document.getElementById('dataDisplay');
+            
+            switch(format) {
+                case 'text':
+                    if (data.content) {
+                        display.innerHTML = `<pre class="text-content">${data.content}</pre>`;
+                    } else {
+                        displayTableData(data);
+                    }
+                    break;
+
+                case 'image':
+                    display.innerHTML = `
+                        <div class="image-preview">
+                            <img src="${data.url}" alt="Uploaded image">
+                        </div>
+                    `;
+                    break;
+
+                case 'audio':
+                    display.innerHTML = `
+                        <div class="audio-player">
+                            <audio controls>
+                                <source src="${data.url}" type="${data.mime_type}">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    `;
+                    break;
+
+                case '3d':
+                    display.innerHTML = `
+                        <div class="model-viewer">
+                            <model-viewer src="${data.url}" 
+                                        auto-rotate 
+                                        camera-controls
+                                        shadow-intensity="1">
+                            </model-viewer>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        function displayTableData(data) {
+            const display = document.getElementById('dataDisplay');
+            if (data.data.length === 0) {
+                display.innerHTML = '<p>No data available</p>';
+                return;
+            }
+
+            let table = '<div class="table-wrapper"><table><thead><tr>';
+            data.headers.forEach(header => {
+                table += `<th>${header}</th>`;
+            });
+            table += '</tr></thead><tbody>';
+
+            data.data.forEach(row => {
+                table += '<tr>';
+                data.headers.forEach(header => {
+                    table += `<td>${row[header]}</td>`;
+                });
+                table += '</tr>';
+            });
+
+            table += '</tbody></table></div>';
+            display.innerHTML = table;
+        }
+    </script>
+    <!-- Add model-viewer for 3D files -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+</body>
+</html> 
