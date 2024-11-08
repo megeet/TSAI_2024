@@ -4,3 +4,4 @@ pydantic>=2.6.0
 torch==2.2.1
 transformers==4.37.2
 python-multipart==0.0.6
+nltk>=3.8.1

@@ -90,4 +90,16 @@ button {
 button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
+}
+
+.augmented-text {
+  background-color: #ffd1dc;  /* Baby pink color */
+  padding: 0.1rem 0.2rem;
+  border-radius: 3px;
+  margin: 0 1px;
+  transition: background-color 0.2s;
+}
+
+.augmented-text:hover {
+  background-color: #ffbfcf;  /* Slightly darker shade for hover effect */
 } 

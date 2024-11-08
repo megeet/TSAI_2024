@@ -73,6 +73,22 @@ function TextProcessor() {
     }
   };
 
+  const renderAugmentedText = (text) => {
+    if (!text) return null;
+    
+    // Split the text by augmentation tags
+    const parts = text.split(/(<aug>.*?<\/aug>)/);
+    
+    return parts.map((part, index) => {
+      if (part.startsWith('<aug>') && part.endsWith('</aug>')) {
+        // Extract the text between tags and render with augmented class
+        const augmentedText = part.replace(/<\/?aug>/g, '');
+        return <span key={index} className="augmented-text">{augmentedText}</span>;
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
+
   return (
     <div>
       <div className="back-button-container">
@@ -132,7 +148,7 @@ function TextProcessor() {
           </button>
           <div className="content-display">
             <h3>Augmented Content:</h3>
-            <pre>{augmentedContent}</pre>
+            <pre>{renderAugmentedText(augmentedContent)}</pre>
           </div>
         </div>
       </div>
