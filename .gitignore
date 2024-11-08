@@ -3,3 +3,10 @@
 
 /Week_02/ai_web_ser_fastapi/__pycache__
 /Week_02/ai_web_ser_fastapi/myenv
+/Week_03/python_3_12
+**/node_modules/
+**/__pycache__/
+**/nltk_data/
+**/Prompts.txt
+/Week_03/.python-version
+

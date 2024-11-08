@@ -1,0 +1,3 @@
+from "1984" by George Orwell:
+
+“It was a bright cold day in April, and the clocks were striking thirteen. Winston Smith, his chin nuzzled into his breast, ducked his head to escape the vile wind. His mind slid away into the labyrinthine world of doublethink. The Ministry of Truth had just issued a new edition of the Newspeak dictionary.”
