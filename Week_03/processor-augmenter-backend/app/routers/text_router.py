@@ -7,12 +7,35 @@ text_service = TextService()
 
 class TextRequest(BaseModel):
     text: str
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "text": "Sample text to process."
+                }
+            ]
+        }
+    }
 
-@router.post("/process-text")
+class TextResponse(BaseModel):
+    processed_text: str
+    tokens: str
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "processed_text": "processed sample text",
+                    "tokens": "sample tokens"
+                }
+            ]
+        }
+    }
+
+@router.post("/process-text", response_model=TextResponse)
 async def process_text(request: TextRequest):
     try:
-        processed_text = text_service.process_text(request.text)
-        return {"processed_text": processed_text}
+        result = text_service.process_text(request.text)
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

@@ -6,6 +6,7 @@ function TextProcessor() {
   const navigate = useNavigate();
   const [fileContent, setFileContent] = useState('');
   const [processedContent, setProcessedContent] = useState('');
+  const [tokens, setTokens] = useState('');
   const [augmentedContent, setAugmentedContent] = useState('');
 
   const handleFileUpload = (event) => {
@@ -21,17 +22,38 @@ function TextProcessor() {
 
   const processText = async () => {
     try {
+      console.log('Sending request to backend...');
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
       const response = await fetch('http://localhost:8000/api/process-text', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify({ text: fileContent }),
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+      }
+      
       const data = await response.json();
+      console.log('Received response:', data);
       setProcessedContent(data.processed_text);
+      setTokens(data.tokens);
     } catch (error) {
-      console.error('Error processing text:', error);
+      console.error('Error details:', error);
+      if (error.name === 'AbortError') {
+        alert('Request timed out. Please check if the backend server is running.');
+      } else {
+        alert(`Error processing text: ${error.message}`);
+      }
     }
   };
 
@@ -73,10 +95,34 @@ function TextProcessor() {
           <button onClick={processText} disabled={!fileContent}>
             Process
           </button>
-          <div className="content-display">
+          <div className="result-box">
             <h3>Processed Content:</h3>
             <pre>{processedContent}</pre>
           </div>
+          {tokens && (
+            <div className="result-box">
+              <h3>Tokens:</h3>
+              <div className="tokens-container">
+                {tokens.split(' ').map((token, index) => {
+                  const match = token.match(/(.*?)(\s*\[\d+\]|\s*\[N\/A\])$/);
+                  if (match) {
+                    const [_, tokenText, tokenId] = match;
+                    return (
+                      <span key={index} className="token">
+                        <span className="token-text">{tokenText}</span>
+                        <span className="token-id">{tokenId}</span>
+                      </span>
+                    );
+                  }
+                  return (
+                    <span key={index} className="token">
+                      <span className="token-text">{token}</span>
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="section">

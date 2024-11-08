@@ -1,14 +1,3 @@
-I want you to create two modules:
-1. The first module will use react and it will contain all code for front end. The module name could be processor-augmenter-frontend
-2. The second module is a python module with Fast API support. The module name could be processor-augmenter-backend
+from "1984" by George Orwell:
 
-Please find below the functionality I want to have. 
-Keep the front end and backend files as mentioned in above modules accordingly.
-- I want to have a home page where I should be able to select file type I want to upload. It could be simple button.
-- I want to support four types of files - Text, Image, Audio and 3D
-- Once I click on "Text" Button, it should open a new page where I have three sections.
-	- The first section is to upload a text file and show it's contents as well.
-	- The second section is to process the text file,
-	- The third section is to augment the file
-	These sections could be columnar.
-
+“It was a bright cold day in April, and the clocks were striking thirteen. Winston Smith, his chin nuzzled into his breast, ducked his head to escape the vile wind. His mind slid away into the labyrinthine world of doublethink. The Ministry of Truth had just issued a new edition of the Newspeak dictionary.”

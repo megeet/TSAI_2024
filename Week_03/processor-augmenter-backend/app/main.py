@@ -4,14 +4,19 @@ from .routers import text_router
 
 app = FastAPI()
 
-# Configure CORS
+# Configure CORS with more permissive settings
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
-    allow_credentials=True,
+    allow_origins=["*"],  # Allows all origins during development
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Add a test endpoint
+@app.get("/")
+async def root():
+    return {"message": "Server is running"}
+
 # Include routers
-app.include_router(text_router.router, prefix="/api") 
+app.include_router(text_router.router, prefix="/api")
