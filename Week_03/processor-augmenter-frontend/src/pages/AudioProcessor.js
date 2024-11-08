@@ -6,6 +6,7 @@ function AudioProcessor() {
   const navigate = useNavigate();
   const [selectedAudio, setSelectedAudio] = useState(null);
   const [processedAudio, setProcessedAudio] = useState(null);
+  const [mfccPlot, setMfccPlot] = useState(null);
   const [augmentedAudio, setAugmentedAudio] = useState(null);
 
   const handleAudioUpload = (event) => {
@@ -30,8 +31,9 @@ function AudioProcessor() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.blob();
-      setProcessedAudio(URL.createObjectURL(data));
+      const data = await response.json();
+      setProcessedAudio(data.processed_audio);
+      setMfccPlot(data.mfcc_plot);
     } catch (error) {
       console.error('Error processing audio:', error);
       alert('Error processing audio. Please check the console for details.');
@@ -41,8 +43,7 @@ function AudioProcessor() {
   const augmentAudio = async () => {
     try {
       const formData = new FormData();
-      const audioToAugment = processedAudio || selectedAudio;
-      const blob = await fetch(audioToAugment).then(r => r.blob());
+      const blob = await fetch(selectedAudio).then(r => r.blob());
       formData.append('audio', blob);
 
       const response = await fetch('http://localhost:8000/api/augment-audio', {
@@ -93,7 +94,7 @@ function AudioProcessor() {
         <div className="section">
           <h2>Process Audio</h2>
           <button onClick={processAudio} disabled={!selectedAudio}>
-            Process (Noise Reduction)
+            Process (Frequency Increase)
           </button>
           <div className="audio-display">
             <h3>Processed Audio:</h3>
@@ -102,6 +103,12 @@ function AudioProcessor() {
                 <audio controls src={processedAudio}>
                   Your browser does not support the audio element.
                 </audio>
+              </div>
+            )}
+            {mfccPlot && (
+              <div className="mfcc-display">
+                <h3>MFCC Visualization:</h3>
+                <img src={mfccPlot} alt="MFCC Plot" className="mfcc-plot" />
               </div>
             )}
           </div>

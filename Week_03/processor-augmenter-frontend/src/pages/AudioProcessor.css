@@ -71,4 +71,17 @@ button:disabled {
 
 .back-button:hover {
   background-color: #5a6268;
+}
+
+.mfcc-display {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.mfcc-plot {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 } 
