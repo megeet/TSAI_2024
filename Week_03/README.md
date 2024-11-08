@@ -32,4 +32,9 @@ A comprehensive web application for processing and augmenting different types of
 
 ### Backend Setup
 
-1. Create and activate a Python virtual environment: 
+1. Create and activate a Python virtual environment:
+```bash
+# Create virtual environment
+python -m venv myenv
+source myenv/bin/activate  # For Linux/Mac
+myenv\Scripts\activate  # For Windows
