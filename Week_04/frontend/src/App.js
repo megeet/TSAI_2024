@@ -102,7 +102,7 @@ function App() {
     }
   };
 
-  const lossData = {
+  const combinedData = {
     labels: metrics.loss.map((_, index) => index),
     datasets: [
       {
@@ -110,20 +110,49 @@ function App() {
         data: metrics.loss,
         borderColor: 'rgb(255, 99, 132)',
         tension: 0.1,
+        yAxisID: 'y-loss',
       },
-    ],
-  };
-
-  const accuracyData = {
-    labels: metrics.accuracy.map((_, index) => index),
-    datasets: [
       {
         label: 'Accuracy',
         data: metrics.accuracy,
         borderColor: 'rgb(75, 192, 192)',
         tension: 0.1,
+        yAxisID: 'y-accuracy',
       },
     ],
+  };
+
+  const chartOptions = {
+    scales: {
+      'y-loss': {
+        type: 'linear',
+        position: 'left',
+        title: {
+          display: true,
+          text: 'Loss'
+        },
+        grid: {
+          display: false
+        }
+      },
+      'y-accuracy': {
+        type: 'linear',
+        position: 'right',
+        title: {
+          display: true,
+          text: 'Accuracy (%)'
+        },
+        grid: {
+          display: false
+        }
+      }
+    },
+    layout: {
+      padding: {
+        left: 15,
+        right: 15
+      }
+    }
   };
 
   return (
@@ -151,14 +180,13 @@ function App() {
         </div>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
-        <div style={{ width: '45%' }}>
-          <h2>Loss</h2>
-          <Line data={lossData} />
-        </div>
-        <div style={{ width: '45%' }}>
-          <h2>Accuracy</h2>
-          <Line data={accuracyData} />
+      <div style={{ marginTop: '20px' }}>
+        <h2>Training Metrics</h2>
+        <div style={{ 
+          width: '70%',  // Takes up 70% of the space (15% margin on each side)
+          margin: '0 auto'  // Centers the container
+        }}>
+          <Line data={combinedData} options={chartOptions} />
         </div>
       </div>
 
