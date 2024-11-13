@@ -8,7 +8,6 @@ from torch.utils.data import DataLoader
 from model import MNISTConvNet
 from tqdm import tqdm
 import random
-import numpy as np
 from threading import Thread, Event
 import atexit
 
@@ -72,9 +71,9 @@ def train_model():
                 break
                 
             model.train()
-            running_loss = 0.0
-            correct = 0
-            total = 0
+            epoch_loss = 0.0
+            epoch_correct = 0
+            epoch_total = 0
             
             progress_bar = tqdm(train_loader, desc=f'Epoch {epoch+1}/{num_epochs}')
             
@@ -90,19 +89,43 @@ def train_model():
                 loss.backward()
                 optimizer.step()
                 
-                running_loss += loss.item()
+                # Calculate batch metrics
+                batch_loss = loss.item()
                 _, predicted = output.max(1)
-                total += target.size(0)
-                correct += predicted.eq(target).sum().item()
+                batch_total = target.size(0)
+                batch_correct = predicted.eq(target).sum().item()
                 
-                if batch_idx % 10 == 0:
-                    training_history['loss'].append(running_loss / (batch_idx + 1))
-                    training_history['accuracy'].append(100. * correct / total)
+                # Update epoch totals
+                epoch_loss += batch_loss
+                epoch_correct += batch_correct
+                epoch_total += batch_total
+                
+                # Update training history every 100 batches
+                if batch_idx % 100 == 0:
+                    current_loss = epoch_loss / (batch_idx + 1)
+                    current_accuracy = 100. * epoch_correct / epoch_total
+                    
+                    training_history['loss'].append(current_loss)
+                    training_history['accuracy'].append(current_accuracy)
                     training_history['current_epoch'] = epoch + 1
+                    
+                    # Update progress bar description
+                    progress_bar.set_postfix({
+                        'loss': f'{current_loss:.4f}',
+                        'accuracy': f'{current_accuracy:.2f}%'
+                    })
+            
+            # Print epoch summary
+            avg_epoch_loss = epoch_loss / len(train_loader)
+            avg_epoch_accuracy = 100. * epoch_correct / epoch_total
+            print(f"\nEpoch {epoch + 1} Summary:")
+            print(f"Average Loss: {avg_epoch_loss:.4f}")
+            print(f"Average Accuracy: {avg_epoch_accuracy:.2f}%")
             
         if not stop_training.is_set():
             torch.save(model.state_dict(), 'mnist_cnn.pth')
             training_history['is_completed'] = True
+            print("\nTraining completed successfully!")
             
     except Exception as e:
         print(f"Error during training: {str(e)}")
