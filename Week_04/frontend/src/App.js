@@ -145,7 +145,9 @@ function App() {
 
       {metrics.is_training && (
         <div style={{ margin: '10px 0' }}>
-          Training Progress: Epoch {metrics.current_epoch}/5
+          <div>Training Progress: Epoch {metrics.current_epoch}/5</div>
+          <div>Current Loss: {metrics.loss[metrics.loss.length - 1]?.toFixed(4) || 'N/A'}</div>
+          <div>Current Accuracy: {metrics.accuracy[metrics.accuracy.length - 1]?.toFixed(2) || 'N/A'}%</div>
         </div>
       )}
 
@@ -167,7 +169,12 @@ function App() {
             {predictions.map((pred, idx) => (
               <div key={idx} style={{ border: '1px solid #ccc', padding: '10px' }}>
                 <p>True Label: {pred.true_label}</p>
-                <p>Predicted: {pred.predicted_label}</p>
+                <p style={{ 
+                  color: pred.true_label === pred.predicted_label ? 'green' : 'red',
+                  fontWeight: pred.true_label === pred.predicted_label ? 'bold' : 'normal'
+                }}>
+                  Predicted: {pred.predicted_label}
+                </p>
                 <canvas
                   ref={canvas => {
                     if (canvas) {
