@@ -64,7 +64,7 @@ def train_model():
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=0.001)
         
-        num_epochs = 10
+        num_epochs = 5
         
         for epoch in range(num_epochs):
             if stop_training.is_set():

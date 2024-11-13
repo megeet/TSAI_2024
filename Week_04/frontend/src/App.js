@@ -145,7 +145,7 @@ function App() {
 
       {metrics.is_training && (
         <div style={{ margin: '10px 0' }}>
-          Training Progress: Epoch {metrics.current_epoch}/10
+          Training Progress: Epoch {metrics.current_epoch}/5
         </div>
       )}
 
@@ -172,16 +172,24 @@ function App() {
                   ref={canvas => {
                     if (canvas) {
                       const ctx = canvas.getContext('2d');
-                      const imageData = new ImageData(
-                        new Uint8ClampedArray(pred.image[0][0].flat().map(x => x * 255)),
-                        28,
-                        28
-                      );
+                      const imageArray = pred.image[0][0].flat();
+                      const rgbaArray = new Uint8ClampedArray(28 * 28 * 4);
+                      
+                      for (let i = 0; i < imageArray.length; i++) {
+                        const value = Math.floor(imageArray[i] * 255);
+                        rgbaArray[i * 4] = value;     // R
+                        rgbaArray[i * 4 + 1] = value; // G
+                        rgbaArray[i * 4 + 2] = value; // B
+                        rgbaArray[i * 4 + 3] = 255;   // A (fully opaque)
+                      }
+                      
+                      const imageData = new ImageData(rgbaArray, 28, 28);
                       ctx.putImageData(imageData, 0, 0);
                     }
                   }}
                   width={28}
                   height={28}
+                  style={{ width: '112px', height: '112px' }}
                 />
               </div>
             ))}
