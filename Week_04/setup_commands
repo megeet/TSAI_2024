@@ -1,0 +1,6 @@
+mkdir -p backend/app backend/static frontend/src/components frontend/src/services frontend/public
+touch backend/requirements.txt backend/app/{main,models,train,utils}.py
+touch frontend/src/components/{TrainingVisualizer,PredictionDisplay}.js frontend/src/services/api.js frontend/src/App.js
+touch frontend/public/index.html
+touch frontend/public/manifest.json
+touch frontend/src/index.js 

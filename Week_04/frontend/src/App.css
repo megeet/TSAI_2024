@@ -1,0 +1,211 @@
+:root {
+    --primary-color: #2196F3;
+    --success-color: #4CAF50;
+    --error-color: #f44336;
+    --background-color: #f8fafc;
+    --card-background: #ffffff;
+    --text-primary: #1a2027;
+    --text-secondary: #64748b;
+    --border-radius: 8px;
+    --shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+}
+
+.App {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.App-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.App-header h1 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+}
+
+.status-indicator {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    background: #e3f2fd;
+    color: var(--primary-color);
+}
+
+.error-message {
+    color: var(--error-color);
+    padding: 0.8rem;
+    background-color: #ffebee;
+    border-radius: var(--border-radius);
+    margin: 0.8rem 0;
+    border-left: 3px solid var(--error-color);
+    font-size: 0.9rem;
+}
+
+.control-buttons {
+    margin: 1rem 0;
+}
+
+.start-button, .stop-button {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.start-button {
+    background-color: var(--success-color);
+    color: white;
+    box-shadow: 0 2px 4px rgba(76, 175, 80, 0.2);
+}
+
+.start-button:hover {
+    background-color: #43a047;
+    transform: translateY(-1px);
+}
+
+.stop-button {
+    background-color: var(--error-color);
+    color: white;
+    box-shadow: 0 2px 4px rgba(244, 67, 54, 0.2);
+}
+
+.stop-button:hover {
+    background-color: #e53935;
+    transform: translateY(-1px);
+}
+
+.training-section, .results-section {
+    background: var(--card-background);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+}
+
+.training-visualizer {
+    padding: 1rem;
+}
+
+.training-stats {
+    background: #f8fafb;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.current-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8rem;
+    text-align: center;
+}
+
+.current-stats h3 {
+    grid-column: 1 / -1;
+    color: var(--primary-color);
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+}
+
+.current-stats p {
+    margin: 0;
+    padding: 0.6rem;
+    background: white;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.chart-container {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    height: 400px;
+    box-shadow: var(--shadow);
+}
+
+.predictions-container {
+    margin-top: 1.5rem;
+}
+
+.predictions-container h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin: 0 0 1.5rem 0;
+    font-size: 1.4rem;
+}
+
+.predictions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    padding: 0.5rem;
+}
+
+.prediction-item {
+    background: white;
+    padding: 0.8rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease;
+}
+
+.prediction-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.prediction-info {
+    margin-top: 0.8rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.prediction-info p {
+    margin: 0.3rem 0;
+}
+
+@media (max-width: 768px) {
+    .App {
+        padding: 0.5rem;
+    }
+    
+    .current-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .chart-container {
+        height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .current-stats {
+        grid-template-columns: 1fr;
+    }
+} 
