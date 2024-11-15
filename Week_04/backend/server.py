@@ -123,7 +123,7 @@ def train_model():
             print(f"Average Accuracy: {avg_epoch_accuracy:.2f}%")
             
         if not stop_training.is_set():
-            torch.save(model.state_dict(), 'mnist_cnn.pth')
+            torch.save(model.state_dict(), 'mnist_cnn.pth', weights_only=True)
             training_history['is_completed'] = True
             print("\nTraining completed successfully!")
             
@@ -166,7 +166,7 @@ def get_random_predictions():
     try:
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         model = MNISTConvNet().to(device)
-        model.load_state_dict(torch.load('mnist_cnn.pth'))
+        model.load_state_dict(torch.load('mnist_cnn.pth', weights_only=True))
         model.eval()
         
         transform = transforms.Compose([
